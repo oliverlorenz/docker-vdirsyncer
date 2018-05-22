@@ -5,4 +5,6 @@ services:
     image: kaergel/vdirsyncer
     volumes:
       - ./config:/home/vds/.config/vdirsyncer/config
+      - ./data/.vdirsyncer:/root/.vdirsyncer
+      - ./data/.calendars:/root/.calendars
     restart: always
