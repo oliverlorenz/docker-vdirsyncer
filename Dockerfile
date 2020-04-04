@@ -1,13 +1,9 @@
-FROM ubuntu:16.04
-LABEL maintainer="Thomas Kärgel kaergel at b1-systems.de"
-#ENV REFRESHED_AT=20170408 LC_ALL=C.UTF-8 LANG=C.UTF-8
-#RUN useradd -m -s /bin/bash vds
-RUN apt-get update; \
-#    apt-get upgrade -y; \
-     apt-get install -y libxml2 libxslt1.1 zlib1g python3-pip; \
-#    pip3 install -U pip; \
-#    pip3 install vdirsyncer
-#USER vds
-RUN mkdir -p /home/vds/.config/vdirsyncer/
-COPY ./docker-entrypoint.sh /
-ENTRYPOINT ["/docker-entrypoint.sh"]
+FROM alpine:3.7
+
+RUN apk add --no-cache --update python3 && \
+    pip3 install vdirsyncer && \
+    adduser -D -H vdirsyncer
+ADD docker-entrypoint.sh /etc/periodic/15min/job
+RUN chmod +x /etc/periodic/15min/job
+
+CMD crond -f
